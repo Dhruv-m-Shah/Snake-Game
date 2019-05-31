@@ -4,8 +4,10 @@ Created on Sat May 11 21:53:58 2019
 
 @author: dhruv
 """
+from PIL import Image
 import pygame
 import random
+import webbrowser
 
 pygame.init()
 
@@ -134,21 +136,54 @@ def food_location():
     y1 = random.randint(0, 17)
     
 def loading_screen():
-    Letters = pygame.image.load('SnakeGameText.png')
-    back_ground = pygame.image.load('loading_screen.png')
-    start_button = pygame.image.load('StartButtonGreen.png')
-    back_ground = pygame.transform.scale(back_ground, (672, 420))
-    gameDisplay = pygame.display.set_mode((700, 450))
-    gameDisplay.blit(back_ground, (14, 15))
-    gameDisplay.blit(Letters, (125, 15))
-    start_button = pygame.transform.scale(start_button, (128, 48))
-    gameDisplay.blit(start_button, (60, 130))
-    pygame.display.update()
+    myfont = pygame.font.SysFont('Helvetica-Bold', 250)
+    back_ground = pygame.image.load('bg_green.png')
+    gameDisplay = pygame.display.set_mode((1400, 900))
+    gameDisplay.blit(back_ground, (0, 0))
+    SnakeGame = myfont.render("snake game", False, (255, 255, 255))
+    Play = myfont.render("play", False, (255, 255, 255))
+    github = myfont.render("github", False, (255, 255, 255))
+    count = 0
+    image_list = []
+    for i in range(229):
+        if i<10:
+            image_list.append("loop_0000"+str(i)+".png")
+        elif i>=10 and i<=99:
+            image_list.append("loop_000"+str(i)+".png")
+        else:
+            image_list.append("loop_00"+str(i)+".png")
+    player_selection = 0
     while(True):
+        
+        #Set up animation and images 
+        pygame.time.delay(10)
+        gameDisplay.blit(back_ground, (0, 0))
+        gameDisplay.blit(SnakeGame, (60, 25))
+        gameDisplay.blit(Play, (60, 325))
+        gameDisplay.blit(github, (60, 625))
+        animation = pygame.image.load(image_list[count%228])
+        gameDisplay.blit(animation, (1100, 40))
+        if(player_selection == 0):
+            pygame.draw.rect(gameDisplay, (255, 255, 255), (30, 420, 20, 20))
+        else:
+            pygame.draw.rect(gameDisplay, (255, 255, 255), (30, 720, 20, 20))
+        pygame.display.update()
+        #Set up animation and images END
+        
+        #User input
         pygame.event.get()
-        pos = pygame.mouse.get_pos()
-        if(pygame.mouse.get_pressed()[0] and pos[0]>=60 and pos[0]<=187 and pos[1]>=130 and pos[1]<=177):
-            break
+        keys = pygame.key.get_pressed()
+        if(keys[pygame.K_UP]):
+            player_selection = 0
+        if(keys[pygame.K_DOWN]):
+            player_selection = 1
+        if(keys[pygame.K_RETURN] and player_selection == 0):
+            break;
+        if(keys[pygame.K_RETURN] and player_selection == 1):
+            webbrowser.open('https://github.com/Dhruv-m-Shah')
+        count+=1
+        #User input END
+        
     win = pygame.display.set_mode((19*40, 19*40))
         
 
